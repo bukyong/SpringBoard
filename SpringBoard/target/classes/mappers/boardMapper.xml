@@ -10,5 +10,11 @@
        insert into tbl_board (title,writer,content) 
 	   values(#{title},#{writer},#{content})	    
     </insert>
+    
+    <!-- 글 목록 조회 -->
+    <select id="selectBoardList" resultType="com.itwillbs.domain.BoardVO">
+       select * from tbl_board 
+       order by regdate desc
+    </select>
 
 </mapper>

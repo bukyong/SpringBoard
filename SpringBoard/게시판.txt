@@ -54,6 +54,52 @@ p83.
 		본문수정 GET : /board/modify?bno=000
 		본문수정 POST : /board/modify
 		본문삭제 POST : /board/remove
+
+* 의존객체 자동주입 : 스프링(컨테이너)이(가) 자동으로 의존관계에 있는 객체를 
+						사용하도록 의존성을 주입하는 것
+						
+	- @Inject : Java에서 지원하는 어노테이션 (특정 프레임워크에 종속적이지 않다)
+		* 의존객체를 찾는 순서
+			[타입] -> [@Qualifier] -> [이름] -> 실패
 		
+		* 빌드 도구(Maven/gradle)를 사용해서 라이브러리 의존성 추가 필요
+		* 멤버 변수, setter(set메서드), 생성자, 일반 메서드 사용 가능
 		
+	- @Autowired : Spring에서 지원하는 어노테이션
+		* 의존객체를 찾는 순서
+			[타입] -> [이름] -> [@Qualifier] -> 실패
 		
+		* @Inject와 찾는 순서만 다를 뿐 동일하게 동작
+		* <context:annotation-config/> 구문 설정 필요
+		* 멤버 변수, setter(set메서드), 생성자, 일반 메서드 사용 가능
+		
+	- @Resource : Java에서 지원하는 어노테이션 (특정 프레임워크에 종속적이지 않다)
+		* 의존객체를 찾는 순서
+			[이름] -> [타입] -> [@Qualifier] -> 실패
+			
+		* <context:annotation-config/> 구문 설정 필요
+		* 멤버 변수, setter(set메서드) 사용 가능
+		
+	** @Qualifier : 객체를 주입 받아올 때 동일한 객체(bean)가 있을 경우 예외 발생=
+		-> 특정 개체를 구분하기 위한 이름(별명)
+
+
+	<bean id="dataSource" 
+		class="com.zaxxer.hikari.HikariDataSource">
+		<qualifier value="ds1"/>
+	</bean>
+	
+	<bean id="dataSource2" 
+		class="com.zaxxer.hikari.HikariDataSource">
+		<qualifier value="ds2"/>
+	</bean>		
+	
+	@Inject / @Autowired	@Qualifier("ds2")
+	private DataSource ds;
+	
+	
+	private DateSource ds;
+	
+	public Test(DataSource ds) {
+		this.ds = ds;
+	}
