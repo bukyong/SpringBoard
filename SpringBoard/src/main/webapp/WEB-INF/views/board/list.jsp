@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../include/header.jsp"%>
@@ -22,15 +23,18 @@
 					<th style="width: 120px">viewcnt(조회수)</th>
 					<th>regdate(날짜)</th>
 				</tr>
-				<c:forEach var="bvo" items="${boardList }">
+				<c:forEach var="bVO" items="${boardList }">
 					<tr>
-						<td>${bvo.bno }</td>
-						<td>${bvo.title }</td>
-						<td>${bvo.writer }</td>
-						<td><span class="badge bg-red">${bvo.viewcnt }</span></td>
+						<td>${bVO.bno }</td>
 						<td>
-							${bvo.regdate }
-							<fmt:formatDate value = "${bvo.regdate }" pattern="yy.mm.dd"/>
+							<a href="/board/read?bno=${bVO.bno }">${bVO.title }</a>
+						</td>
+						<td>
+							${bVO.writer }
+						</td>
+						<td><span class="badge bg-red">${bVO.viewcnt }</span></td>
+						<td>
+						   <fmt:formatDate value="${bVO.regdate }" pattern="yy.MM.dd"/> 
 						</td>
 					</tr>
 				</c:forEach>

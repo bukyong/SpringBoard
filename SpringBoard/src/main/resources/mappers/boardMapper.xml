@@ -12,9 +12,15 @@
     </insert>
     
     <!-- 글 목록 조회 -->
-    <select id="selectBoardList" resultType="com.itwillbs.domain.BoardVO">
+    <select id="selectBoardList" resultType="BoardVO">
        select * from tbl_board 
        order by regdate desc
+    </select>
+    
+    <!-- 글 정보 조회 -->
+    <select id="selectBoard" resultType="BoardVO">
+    	select * from tbl_board
+    	where bno=#{bno}
     </select>
 
 </mapper>

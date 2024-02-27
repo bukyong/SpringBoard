@@ -35,5 +35,15 @@ public class BoardServiceImpl implements BoardService {
 		
 		return bdao.boardListSelect();
 	}
+
+	@Override
+	public BoardVO read(Integer bno) throws Exception {
+		logger.debug(" getBoard(BoardVO vo) 실행 -> DAO 글쓰기 동작 호출 ");
 		
+		BoardVO resultVO = bdao.boardSelect(bno);
+		
+		return resultVO;
+	}
+	
+	
 }
