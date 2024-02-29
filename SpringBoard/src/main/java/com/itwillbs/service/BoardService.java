@@ -16,10 +16,18 @@ public interface BoardService {
 	// 글쓰기 동작
 	public void regist(BoardVO vo) throws Exception;
 	
-	// 글 목록 조회
+	// 글 목록 조회 동작
 	public List<BoardVO> getList() throws Exception;
 	
-	// 글 정보 조회
+	// 글 정보 조회 동작
 	public BoardVO read(Integer bno) throws Exception;
 	
+	// 글 조회수 1 증가 동작
+	public void updateViewcnt(Integer bno) throws Exception;
+	
+	// 글 정보 수정 동작
+	public void modifyBoard(BoardVO vo) throws Exception;
+	
+	// 글 삭제 동작
+	public void deleteBoard(Integer bno) throws Exception;
 }

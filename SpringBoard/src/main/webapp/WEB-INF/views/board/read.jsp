@@ -3,9 +3,14 @@
 
 <div class="content">
 	<h1>/board/read.jsp</h1>
+	
+	<form role="form" action="" method="get" class="fm">
+	   <input type="hidden" name="bno" value="${vo.bno }">
+	</form>
 
 	${vo }
-
+	viewUpdateStatus : ${viewUpdateStatus }
+	
 	<hr>
 
 	<div class="box box-primary">
@@ -41,6 +46,27 @@
 <!-- JQuery 라이브러리 추가 (include/header.jsp 파일에 추가되어있음) -->
 <script>
 	$(document).ready(function() {
+		
+		// bno를 저장하는 폼태그 정보 가져오기
+		// 속성 탐색 선택자 사용
+		//console.log($("form[role='form']"));
+		//console.log($(".fm"));
+		var formObj = $("form[role='form']");
+		
+		// '수정하기' 버튼 클릭시
+		$(".btn-danger").click(function() {
+			alert(" '수정하기' 버튼 클릭! ");
+			// 글 수정 페이지로 이동
+			formObj.attr("action", "/board/modify");
+			formObj.submit();
+		});
+		
+		// '삭제하기' 버튼 클릭시
+		$(".btn-warning").click(function() {
+			alert(" '삭제하기' 버튼 클릭! ");
+			formObj.attr("method", "post");
+			formObj.submit();
+		});
 		
 		//alert("Test");
 		// '목록이동' 버튼 클릭시

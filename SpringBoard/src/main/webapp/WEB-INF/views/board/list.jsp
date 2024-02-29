@@ -7,6 +7,7 @@
 <h1>/board/list.jsp</h1>
 
 글 개수 : ${boardList.size() }
+viewUpdateStatus : ${viewUpdateStatus }
 
 <div class="box">
 	<div class="box-header with-border">

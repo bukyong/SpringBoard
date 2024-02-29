@@ -40,11 +40,31 @@ public class BoardDAOImpl implements BoardDAO{
 
 	@Override
 	public BoardVO boardSelect(Integer bno) throws Exception {
-		logger.debug(" boardSelect() -> mapper 호출 ");
+		logger.debug(" boardSelect(Integer bno) -> mapper 호출 ");
 		
 		return sqlSession.selectOne(NAMESPACE + ".selectBoard", bno);
 	}
-	
+
+	@Override
+	public void boardViewcntUpdate(int bno) throws Exception {
+		logger.debug(" boardViewcntUpdate(int bno) -> mapper 호출 ");
+		
+		sqlSession.update(NAMESPACE + ".updateViewcnt", bno);
+	}
+
+	@Override
+	public void boardUpdate(BoardVO vo) throws Exception {
+		logger.debug(" boardUpdate(BoardVO vo) -> mapper 호출 ");
+		
+		sqlSession.update(NAMESPACE + ".updateBoard", vo);
+	}
+
+	@Override
+	public void boardDelete(Integer bno) throws Exception {
+		logger.debug(" boardDelete(BoardVO vo) -> mapper 호출 ");
+		
+		sqlSession.delete(NAMESPACE + ".deleteBoard", bno);
+	}
 	
 	
 }

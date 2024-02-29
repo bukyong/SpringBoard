@@ -44,6 +44,27 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultVO;
 	}
+
+	@Override
+	public void updateViewcnt(Integer bno) throws Exception {
+		logger.debug(" updateViewcnt(Integer bno) 실행 -> DAO 글쓰기 동작 호출 ");
+		
+		bdao.boardViewcntUpdate(bno);
+	}
+
+	@Override
+	public void modifyBoard(BoardVO vo) throws Exception {
+		logger.debug(" update(BoardVO vo) 실행 -> DAO 글 수정 동작 호출 ");
+		
+		bdao.boardUpdate(vo);
+	}
+
+	@Override
+	public void deleteBoard(Integer bno) throws Exception {
+		logger.debug(" deleteBoard(BoardVO vo) 실행 -> DAO 글 삭제 동작 호출 ");
+		
+		bdao.boardDelete(bno);
+	}
 	
 	
 }
