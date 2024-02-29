@@ -140,34 +140,16 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-//	// 본문삭제 GET 
-//	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-//	public void modifyGET(@RequestParam("bno") int bno, Model model) throws Exception {
-//		logger.debug("/board/list -> deleteGET() 호출");
-//		
-//		// 전달정보(bno) 저장
-//		logger.debug(" bno : "+bno);
-//		
-//		// 서비스 -> DAO 특정 글 정보 조회 동작
-//		model.addAttribute(bService.read(bno));
-//		
-//		// 연결된 뷰페이지로 전달(Model)
-//
-//		// 뷰페이지로 이동 (/board/modify)	
-//	}
-	
-	// 본문삭제 POST
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	// 본문삭제 POST : /board/remove
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	public String deletePOST(@RequestParam("bno") int bno) throws Exception {
-		logger.debug("/board/list -> deletePOST() 호출");
+		logger.debug("/board/remove -> deletePOST() 호출");
 		
 		// 전달정보(bno) 저장
 		logger.debug(" bno : "+bno);
 		
 		// 서비스 -> DAO 특정 글 삭제 조회 동작
 		bService.deleteBoard(bno);
-		
-		// 연결된 뷰페이지로 전달(Model)
 
 		// 뷰페이지로 이동 (/board/modify)	
 		
