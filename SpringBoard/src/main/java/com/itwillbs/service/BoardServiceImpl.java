@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.domain.BoardVO;
+import com.itwillbs.domain.Criteria;
 import com.itwillbs.persistence.BoardDAO;
 
 @Service
@@ -64,6 +65,13 @@ public class BoardServiceImpl implements BoardService {
 		logger.debug(" deleteBoard(BoardVO vo) 실행 -> DAO 글 삭제 동작 호출 ");
 		
 		bdao.boardDelete(bno);
+	}
+
+	@Override
+	public List<BoardVO> getListCri(Criteria cri) throws Exception {
+		logger.debug(" getListCri(Criteria cri) 실행 -> DAO 글 목록 조회 동작(cri) 호출 ");
+		
+		return bdao.boardListCriSelect(cri);
 	}
 	
 	

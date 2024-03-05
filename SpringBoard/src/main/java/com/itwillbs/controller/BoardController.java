@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.itwillbs.domain.BoardVO;
+import com.itwillbs.domain.Criteria;
 import com.itwillbs.service.BoardService;
 
 @Controller
@@ -156,4 +157,31 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	// http://localhost:8088/board/listCri
+	// http://localhost:8088/board/listCri?page=2
+	// http://localhost:8088/board/listCri?pageSize=30
+	// http://localhost:8088/board/listCri?page=2&pageSize=40
+	// 리스트GET : /board/listCri
+	@RequestMapping(value = "/listCri", method = RequestMethod.GET)
+	public void listCriGET(Criteria cri,Model model, HttpSession session) throws Exception {
+		logger.debug(" /board/listCri -> listCriGET()실행 ");
+		logger.debug(" /board/listCri.jsp 연결 ");
+		
+		// 페이징처리 객체
+//		Criteria cri = new Criteria();
+//		cri.setPageSize(20);
+		
+		// 서비스 -> DAO 게시판 글 목록 가져오기
+		//List<BoardVO> boardList = bService.getList(); // all
+		List<BoardVO> boardList = bService.getListCri(cri); // 페이징
+		
+		logger.debug(" list.size : " + boardList.size());
+		// 연결된 뷰페이지에 정보 전달(Model)
+		model.addAttribute("boardList", boardList);
+		
+		model.addAttribute("cri", cri); // 페이징 처리 정보 전달
+
+		// 조회수 상태 0 : 조회수 증가X ,1 : 조회수 증가O
+		session.setAttribute("viewUpdateStatus", 1);
+	}
 }

@@ -3,6 +3,7 @@ package com.itwillbs.service;
 import java.util.List;
 
 import com.itwillbs.domain.BoardVO;
+import com.itwillbs.domain.Criteria;
 
 /**
  * Controller - DAO를 연결하는 역할
@@ -30,4 +31,7 @@ public interface BoardService {
 	
 	// 글 삭제 동작
 	public void deleteBoard(Integer bno) throws Exception;
+	
+	// 글 목록 조회 동작(페이징처리-cri)
+	public List<BoardVO> getListCri(Criteria cri) throws Exception;
 }
