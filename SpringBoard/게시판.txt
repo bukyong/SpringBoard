@@ -130,3 +130,38 @@ p83.
 	- 조회 화면에서 반드시 목록으로 이동하는 버튼 필요
 	- 본문 조회한 페이지를 처리 후에도 계속해서 유지
 	
+	-- 자가복사 (더미 생성)
+	insert into tbl_board (title, content,writer) 
+	(select title,content,writer from tbl_board);
+	
+* 페이징처리 하단 블럭
+	- 끝 페이지 번호(endPage)
+		- (int)(Math.ceil(page / 페이지 블럭 수) * 페이지 블럭 수)
+		
+	- 시작 페이지 번호(startPage)
+		- (endPage - 페이지 블럭 수) + 1
+		
+	- 전체 글 개수(totalCount)
+	
+	- 이전으로 이동(prev)
+		- startPage == 1? false : true
+		- startPage != 1
+	
+	- 다음으로 이동(next)
+		- endPage * pageSize >= totalCount? false : true
+		- endPage * pageSize < totalCount
+		
+	Q. 한페이지에 10개씩 출력, 총 122개 , 페이지블럭의 수 10개
+		page번호 3 : startpage - 1 endPage - 10 prev - false next - true
+		page번호 10 : startpage - 1  endPage - 10  prev - false next - true
+		page번호 11 : startpage - 11  endPage - 20  prev - true next - false
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

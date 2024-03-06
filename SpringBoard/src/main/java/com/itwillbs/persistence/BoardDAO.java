@@ -37,4 +37,7 @@ public interface BoardDAO {
 	
 	// 글 목록 조회(페이징처리-Cri)
 	public List<BoardVO> boardListCriSelect(Criteria cri) throws Exception;
+	
+	// 총 글의 개수 계산
+	public int boardListCount() throws Exception;
 }

@@ -87,6 +87,13 @@ public class BoardDAOImpl implements BoardDAO{
 		
 		return sqlSession.selectList(NAMESPACE + ".selectBoardListCri", cri);
 	}
+
+	@Override
+	public int boardListCount() throws Exception {
+		logger.debug(" boardListCount() -> mapper 호출 ");
+		
+		return sqlSession.selectOne(NAMESPACE + ".totalCount");
+	}
 	
 	
 }

@@ -70,4 +70,9 @@
 		limit #{startPage}, #{pageSize}
 		]]>
 	</select>
+	
+	<!-- 총 글의 개수 -->
+	<select id="totalCount" resultType="int">
+		select count(bno) from tbl_board
+	</select>
 </mapper>

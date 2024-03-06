@@ -34,4 +34,7 @@ public interface BoardService {
 	
 	// 글 목록 조회 동작(페이징처리-cri)
 	public List<BoardVO> getListCri(Criteria cri) throws Exception;
+	
+	// 총 글의 개수 조회 동작
+	public int getBoardListCount() throws Exception;
 }

@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.domain.BoardVO;
 import com.itwillbs.domain.Criteria;
+import com.itwillbs.domain.PageVO;
 import com.itwillbs.service.BoardService;
 
 @Controller
@@ -68,9 +70,7 @@ public class BoardController {
 		// 연결된 뷰페이지로 전달(Model)
 		model.addAttribute("boardList", boardList);
 		
-		// 조회수 상태 저장 
-		// 0 : 조회수 증가 X
-		// 1 : 조회수 증가 O
+		// 조회수 상태 0 : 조회수 증가 X, 1 : 조회수 증가 O
 		session.setAttribute("viewUpdateStatus", 1);
 		
 		//return "/board/list";
@@ -78,10 +78,11 @@ public class BoardController {
 	
 	// 본문읽기 GET : /board/read?bno=000
 	@RequestMapping(value = "/read", method = RequestMethod.GET)
-	public void readGET(@RequestParam("bno") int bno, Model model, 
+	public void readGET(Criteria cri, @RequestParam("bno") int bno, Model model, 
 			HttpSession session) throws Exception {
 		// @ModelAttribute : 파라메터 저장 + 영역 저장 (1:n 관계)
 		// @RequestParam : 파라메터 저장 (1:1 관계)
+		
 		logger.debug("/board/read -> readGET() 호출");
 		logger.debug("/board/read.jsp 뷰 연결");
 		
@@ -94,6 +95,7 @@ public class BoardController {
 			// 서비스 -> DAO 게시판 글 조회수 1 증가
 			bService.updateViewcnt(bno);
 			
+			// 조회수 상태 0 : 조회수 증가 X, 1 : 조회수 증가 O
 			session.setAttribute("viewUpdateStatus", 0);
 		}
 		
@@ -104,12 +106,15 @@ public class BoardController {
 		model.addAttribute("vo", vo);
 		// model.addAttribute(bService.read(bno));
 		
+		model.addAttribute("cri", cri); //뷰페이지로 페이징처리 정보를 전달
+		
 		// 뷰페이지로 이동 (/board/read)	
 	}
 	
 	// 본문수정 GET : /board/modify?bno=000
+	// 본문수정 GET : /board/modify?bno=000&page=000&pageSize=000
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public void modifyGET(@RequestParam("bno") int bno, Model model, 
+	public void modifyGET(Criteria cri, @RequestParam("bno") int bno, Model model, 
 			HttpSession session) throws Exception {
 		logger.debug("/board/modify -> modifyGET() 호출");
 		logger.debug("/board/modify.jsp 뷰 연결");
@@ -119,6 +124,7 @@ public class BoardController {
 		
 		// 서비스 -> DAO 특정 글 정보 조회 동작
 		model.addAttribute(bService.read(bno));
+		model.addAttribute("cri", cri);
 		
 		// 연결된 뷰페이지로 전달(Model)
 
@@ -127,7 +133,7 @@ public class BoardController {
 	
 	// 본문수정 POST : /board/modify
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modifyPOST(BoardVO vo) throws Exception {
+	public String modifyPOST(Criteria cri, BoardVO vo) throws Exception {
 		logger.debug("/board/modify -> modifyPOST() 호출");
 		
 		// 한글처리 인코딩
@@ -138,12 +144,13 @@ public class BoardController {
 		bService.modifyBoard(vo);
 		
 		// 수정 완료 후 list 페이지로 이동 (redirect)
-		return "redirect:/board/list";
+		//return "redirect:/board/list";
+		return "redirect:/board/listCri?page="+cri.getPage()+"&pageSize="+cri.getPageSize();
 	}
 	
 	// 본문삭제 POST : /board/remove
 	@RequestMapping(value = "/remove", method = RequestMethod.POST)
-	public String deletePOST(@RequestParam("bno") int bno) throws Exception {
+	public String deletePOST(RedirectAttributes rttr, Criteria cri, @RequestParam("bno") int bno) throws Exception {
 		logger.debug("/board/remove -> deletePOST() 호출");
 		
 		// 전달정보(bno) 저장
@@ -152,9 +159,20 @@ public class BoardController {
 		// 서비스 -> DAO 특정 글 삭제 조회 동작
 		bService.deleteBoard(bno);
 
-		// 뷰페이지로 이동 (/board/modify)	
+		try {
+			// 예외가 발생할지도 모르는 코드
+		} catch (Exception e) {
+			// 예외 처리-출력
+		}
+
+		//rttr.addFlashAttribute("cri", cri);
+		//rttr.addFlashAttribute("page", cri.getPage());
+		//rttr.addFlashAttribute("pageSize", cri.getPageSize());
 		
-		return "redirect:/board/list";
+		// 페이지 이동 ( /board/list )
+		//return "redirect:/board/list";
+		return "redirect:/board/listCri?page="+cri.getPage()+"&pageSize="+cri.getPageSize();
+		//return "redirect:/board/listCri";
 	}
 	
 	// http://localhost:8088/board/listCri
@@ -163,13 +181,17 @@ public class BoardController {
 	// http://localhost:8088/board/listCri?page=2&pageSize=40
 	// 리스트GET : /board/listCri
 	@RequestMapping(value = "/listCri", method = RequestMethod.GET)
-	public void listCriGET(Criteria cri,Model model, HttpSession session) throws Exception {
+	public void listCriGET(Criteria cri, Model model, HttpSession session) throws Exception {
 		logger.debug(" /board/listCri -> listCriGET()실행 ");
 		logger.debug(" /board/listCri.jsp 연결 ");
 		
 		// 페이징처리 객체
 //		Criteria cri = new Criteria();
 //		cri.setPageSize(20);
+		PageVO pageVO = new PageVO();
+		pageVO.setCri(cri);
+		//pageVO.setTotalCount(510); // 총 개수 직접 계산
+		pageVO.setTotalCount(bService.getBoardListCount());	// SQL 구문 계산
 		
 		// 서비스 -> DAO 게시판 글 목록 가져오기
 		//List<BoardVO> boardList = bService.getList(); // all
@@ -180,8 +202,10 @@ public class BoardController {
 		model.addAttribute("boardList", boardList);
 		
 		model.addAttribute("cri", cri); // 페이징 처리 정보 전달
-
-		// 조회수 상태 0 : 조회수 증가X ,1 : 조회수 증가O
+		
+		model.addAttribute("pageVO", pageVO);
+		
+		// 조회수 상태 0 : 조회수 증가 X, 1 : 조회수 증가 O
 		session.setAttribute("viewUpdateStatus", 1);
 	}
 }

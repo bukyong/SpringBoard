@@ -1,15 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp"%>
 
+viewUpdateStatus : ${viewUpdateStatus } <br>
+cri : ${cri }
+
 <div class="content">
 	<h1>/board/read.jsp</h1>
 	
 	<form role="form" action="" method="get" class="fm">
 	   <input type="hidden" name="bno" value="${vo.bno }">
+	   <!-- 페이징처리정보 -->
+	   <input type="hidden" name="page" value="${cri.page }">
+	   <input type="hidden" name="pageSize" value="${cri.pageSize }">
 	</form>
-
-	${vo }
-	viewUpdateStatus : ${viewUpdateStatus }
 	
 	<hr>
 
